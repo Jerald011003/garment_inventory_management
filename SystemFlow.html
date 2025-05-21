@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garment Inventory Management System - Basic Flow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #6366f1;
+            --accent-light: #818cf8;
+            --accent-dark: #4f46e5;
+            --success-color: #10b981;
+            --border-color: #333333;
+            --hover-color: #2d2d2d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--card-bg);
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--accent-light);
+            text-align: center;
+            font-weight: 600;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--accent-light);
+            margin: 40px 0 20px 0;
+            font-weight: 500;
+            font-size: 1.8rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: var(--text-primary);
+            margin: 30px 0 15px 0;
+            font-weight: 500;
+            font-size: 1.4rem;
+        }
+        
+        h4 {
+            color: var(--accent-light);
+            margin: 20px 0 15px 0;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        .role {
+            color: var(--accent-light);
+            font-weight: 500;
+        }
+        
+        .workflow-item {
+            margin-bottom: 30px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .process-step {
+            margin-bottom: 25px;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 20px;
+        }
+        
+        .process-step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .detail-list {
+            margin-left: 20px;
+            margin-top: 5px;
+            color: var(--text-secondary);
+        }
+        
+        .icon {
+            margin-right: 8px;
+            color: var(--accent-light);
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .demo-list {
+            counter-reset: item;
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .demo-list li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 45px;
+        }
+        
+        .demo-list li::before {
+            counter-increment: item;
+            content: counter(item);
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .process-arrow {
+            text-align: center;
+            color: var(--accent-light);
+            font-size: 1.5rem;
+            margin: 15px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-tshirt icon"></i>Garment Inventory Management System</h1>
+            <p style="text-align: center; color: var(--text-secondary);">Basic System Flow Guide for Demonstrations</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2><i class="fas fa-info-circle icon"></i>Overview</h2>
+            <p>The Garment Inventory Management System is a web-based application designed to help manage inventory, track orders, and handle sales for a clothing business. This document explains the basic flow of the system for beginners.</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-layer-group icon"></i>System Architecture</h2>
+            <p>The system is built using:</p>
+            <ul>
+                <li><i class="fab fa-php icon"></i>PHP for server-side processing</li>
+                <li><i class="fas fa-database icon"></i>MySQL for database storage</li>
+                <li><i class="fab fa-html5 icon"></i>HTML, CSS, and JavaScript for the front-end</li>
+                <li><i class="fab fa-bootstrap icon"></i>Bootstrap for responsive design</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-users icon"></i>User Roles</h2>
+            <p>The system has three types of users, each with different permissions:</p>
+            <ol>
+                <li><span class="role"><i class="fas fa-user-shield icon"></i>Admin</span> - Full access to all features</li>
+                <li><span class="role"><i class="fas fa-user-tag icon"></i>Sales</span> - Manage inventory and customer orders</li>
+                <li><span class="role"><i class="fas fa-user-cog icon"></i>Staff</span> - Process orders and manage warehouse inventory</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-database icon"></i>Database Structure</h2>
+            <p>The system uses the following main tables:</p>
+            <ul>
+                <li><i class="fas fa-user icon"></i>Users - Store user accounts and authentication information</li>
+                <li><i class="fas fa-box icon"></i>Products - Inventory items with details like price and stock count</li>
+                <li><i class="fas fa-tags icon"></i>Categories - Product categories (T-shirts, Jeans, etc.)</li>
+                <li><i class="fas fa-address-book icon"></i>Customers - Customer information</li>
+                <li><i class="fas fa-shopping-cart icon"></i>Orders - Order information</li>
+                <li><i class="fas fa-list icon"></i>Order_items - Line items for each order</li>
+                <li><i class="fas fa-history icon"></i>Activity_log - User actions for auditing</li>
+            </ul>
+        </div>
+
+        <h2><i class="fas fa-sitemap icon"></i>Basic System Flow</h2>
+
+        <div class="card">
+            <h3><i class="fas fa-sign-in-alt icon"></i>1. Authentication</h3>
+            <ul>
+                <li>Users log in via the main login page (index.php)</li>
+                <li>The system validates credentials against the user database</li>
+                <li>Users are redirected to their role-specific dashboard</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-user-shield icon"></i>2. Admin Workflow</h3>
+            <ul>
+                <li><strong><i class="fas fa-tachometer-alt icon"></i>Dashboard:</strong> View sales summary, recent orders, and inventory status</li>
+                <li><strong><i class="fas fa-boxes icon"></i>Inventory:</strong> Add, edit, and delete products and categories</li>
+                <li><strong><i class="fas fa-shopping-cart icon"></i>Orders:</strong> Manage customer orders and track order status</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-user-tag icon"></i>3. Sales Workflow</h3>
+            <ul>
+                <li><strong><i class="fas fa-tachometer-alt icon"></i>Dashboard:</strong> View sales data and customer activity</li>
+                <li><strong><i class="fas fa-boxes icon"></i>Inventory:</strong> Check product availability</li>
+                <li><strong><i class="fas fa-file-invoice-dollar icon"></i>Create Orders:</strong> Add new customer orders and process sales</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-user-cog icon"></i>4. Staff Workflow</h3>
+            <ul>
+                <li><strong><i class="fas fa-tasks icon"></i>Process Orders:</strong> Fulfill pending orders</li>
+                <li><strong><i class="fas fa-boxes icon"></i>Manage Inventory:</strong> Update stock levels as products are shipped</li>
+                <li><strong><i class="fas fa-warehouse icon"></i>Warehouse:</strong> Track inventory movement in the warehouse</li>
+                <li><strong><i class="fas fa-truck icon"></i>Deliveries:</strong> Monitor order deliveries and update status</li>
+            </ul>
+        </div>
+
+        <h2><i class="fas fa-project-diagram icon"></i>Detailed Process Flows</h2>
+
+        <h3><i class="fas fa-box-open icon"></i>Product Management Flow</h3>
+        <div class="workflow-item">
+            <div class="process-step">
+                <h4><i class="fas fa-plus-circle icon"></i>1. Creating New Products (Admin)</h4>
+                <ul>
+                    <li>Navigate to Inventory page</li>
+                    <li>Click "Add New Product" button</li>
+                    <li>Fill in product details:
+                        <ul class="detail-list">
+                            <li>Product name</li>
+                            <li>Select category from dropdown</li>
+                            <li>Set price</li>
+                            <li>Set initial stock quantity</li>
+                        </ul>
+                    </li>
+                    <li>Click "Save" to create the product</li>
+                    <li>The new product appears in the inventory list</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h4><i class="fas fa-edit icon"></i>2. Updating Products (Admin)</h4>
+                <ul>
+                    <li>Find product in inventory list</li>
+                    <li>Click "Edit" button</li>
+                    <li>Update details as needed</li>
+                    <li>Click "Save" to apply changes</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h4><i class="fas fa-tags icon"></i>3. Managing Categories (Admin)</h4>
+                <ul>
+                    <li>Navigate to Inventory page</li>
+                    <li>Click "Manage Categories" button</li>
+                    <li>Add, edit, or delete product categories</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3><i class="fas fa-shopping-cart icon"></i>Order Processing Flow</h3>
+        <div class="workflow-item">
+            <div class="process-step">
+                <h4><i class="fas fa-file-invoice-dollar icon"></i>1. Creating an Order (Sales)</h4>
+                <ul>
+                    <li>Navigate to Inventory page</li>
+                    <li>Browse available products</li>
+                    <li>Click "Create Order" button</li>
+                    <li>Select or add a customer</li>
+                    <li>Add products to the order:
+                        <ul class="detail-list">
+                            <li>Select products from the list</li>
+                            <li>Set quantities for each item</li>
+                            <li>System calculates prices automatically</li>
+                        </ul>
+                    </li>
+                    <li>Review order details</li>
+                    <li>Click "Submit Order" to complete</li>
+                </ul>
+            </div>
+
+            <div class="process-arrow">
+                <i class="fas fa-arrow-down"></i>
+            </div>
+
+            <div class="process-step">
+                <h4><i class="fas fa-clipboard-check icon"></i>2. Order Assessment (Staff)</h4>
+                <ul>
+                    <li>Staff logs in and views pending orders</li>
+                    <li>Click on an order to see details</li>
+                    <li>Review ordered items and quantities</li>
+                    <li>Check inventory availability</li>
+                    <li>Click "Process Order" to begin fulfillment</li>
+                </ul>
+            </div>
+
+            <div class="process-arrow">
+                <i class="fas fa-arrow-down"></i>
+            </div>
+
+            <div class="process-step">
+                <h4><i class="fas fa-tasks icon"></i>3. Order Status Updates (Staff)</h4>
+                <ul>
+                    <li>Navigate to Process Orders page</li>
+                    <li>Select an order being processed</li>
+                    <li>Update status as the order progresses:
+                        <ul class="detail-list">
+                            <li><span style="color: #f87171;">"Pending"</span> → <span style="color: #60a5fa;">"Processing"</span> → <span style="color: #a78bfa;">"Packed"</span> → <span style="color: #4ade80;">"Shipped"</span> → <span style="color: #10b981;">"Delivered"</span></li>
+                        </ul>
+                    </li>
+                    <li>Each status change is logged with timestamp</li>
+                    <li>Inventory is automatically updated when order is processed</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h4><i class="fas fa-eye icon"></i>4. Order Viewing (All Roles)</h4>
+                <ul>
+                    <li><strong><i class="fas fa-user-shield icon"></i>Admin:</strong> Can view all orders from Orders page</li>
+                    <li><strong><i class="fas fa-user-tag icon"></i>Sales:</strong> Can view orders they created and check status</li>
+                    <li><strong><i class="fas fa-user-cog icon"></i>Staff:</strong> Focuses on orders that need processing</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h4><i class="fas fa-info-circle icon"></i>5. Order Details (All Roles)</h4>
+                <ul>
+                    <li>Click on any order to view complete details:
+                        <ul class="detail-list">
+                            <li>Customer information</li>
+                            <li>Line items with quantities and prices</li>
+                            <li>Order status and history</li>
+                            <li>Total amount</li>
+                            <li>Processing notes</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <h3><i class="fas fa-boxes icon"></i>Inventory Management Flow</h3>
+        <div class="workflow-item">
+            <div class="process-step">
+                <h4><i class="fas fa-cubes icon"></i>1. Stock Updates (Admin & Staff)</h4>
+                <ul>
+                    <li>Navigate to Inventory Management</li>
+                    <li>Update stock quantities manually when receiving new shipments</li>
+                    <li>System automatically reduces stock when orders are processed</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h4><i class="fas fa-exclamation-triangle icon"></i>2. Low Stock Alerts</h4>
+                <ul>
+                    <li>Dashboard shows warnings for low stock items</li>
+                    <li>Admin can set minimum stock thresholds for products</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3><i class="fas fa-users icon"></i>Customer Management Flow</h3>
+        <div class="workflow-item">
+            <div class="process-step">
+                <h4><i class="fas fa-user-plus icon"></i>1. Adding Customers (Sales)</h4>
+                <ul>
+                    <li>Add customer details during order creation</li>
+                    <li>Enter name, contact information, and address</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h4><i class="fas fa-history icon"></i>2. Customer History</h4>
+                <ul>
+                    <li>View previous orders for any customer</li>
+                    <li>Check customer purchase patterns</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-play-circle icon"></i>Getting Started</h2>
+            <ol>
+                <li>Log in with your assigned username and password</li>
+                <li>Navigate to your dashboard based on your role</li>
+                <li>Use the navigation menu to access different functions</li>
+                <li>Follow on-screen instructions to complete tasks</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-laptop-code icon"></i>Demo Walkthrough Sequence</h2>
+            <p>For client demonstrations, follow this sequence:</p>
+            <ol class="demo-list">
+                <li>Log in as Admin to show system overview</li>
+                <li>Create new product categories</li>
+                <li>Add new products to inventory</li>
+                <li>Switch to Sales user</li>
+                <li>Create a new customer order</li>
+                <li>Switch to Staff user to show order processing</li>
+                <li>Update order status to show workflow</li>
+                <li>Return to Admin to view reports and overall system status</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-shield-alt icon"></i>Security Features</h2>
+            <ul>
+                <li><i class="fas fa-key icon"></i>Session-based authentication</li>
+                <li><i class="fas fa-user-lock icon"></i>Role-based access control</li>
+                <li><i class="fas fa-clipboard-list icon"></i>Activity logging for all important actions</li>
+            </ul>
+        </div>
+
+        <p>This guide should help you understand and demonstrate the complete flow of the Garment Inventory Management System during client presentations.</p>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Garment Inventory Management System Documentation</p>
+        </div>
+    </footer>
+</body>
+</html> 
