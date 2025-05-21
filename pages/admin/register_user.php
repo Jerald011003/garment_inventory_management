@@ -9,9 +9,7 @@ checkAuth('admin');
 
 $pageTitle = "Register New User";
 
-// Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate input
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     $confirm_password = trim($_POST['confirm_password']);
@@ -20,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $errors = [];
     
-    // Simple validation
     if (empty($username)) {
         $errors[] = "Username is required";
     }
@@ -39,20 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Invalid role selected";
     }
     
-    // Check if username already exists
     $stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
     $stmt->execute([$username]);
     if ($stmt->fetchColumn() > 0) {
         $errors[] = "Username already exists";
     }
     
-    // If validation passes, insert new user
     if (empty($errors)) {
         try {
             $stmt = $conn->prepare("INSERT INTO users (username, password, full_name, role, status) VALUES (?, ?, ?, ?, 1)");
             $stmt->execute([$username, $password, $full_name, $role]);
             
-            // Log the activity
             $admin_id = $_SESSION['user_id'];
             $log_stmt = $conn->prepare("INSERT INTO activity_log (user_id, action, description) VALUES (?, ?, ?)");
             $log_stmt->execute([$admin_id, 'create_user', "Created new user account for {$username} with role {$role}"]);

@@ -5,12 +5,10 @@ checkAuth('admin');
 
 $page_title = "Inventory Management";
 
-// Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         if (isset($_POST['action'])) {
             if ($_POST['action'] === 'add') {
-                // Add new item
                 $stmt = $conn->prepare("INSERT INTO products (name, category_id, price, stock) VALUES (?, ?, ?, ?)");
                 $stmt->execute([
                     $_POST['item_name'],
@@ -19,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_POST['stock']
                 ]);
                 
-                // Log activity
                 $stmt = $conn->prepare("INSERT INTO activity_log (user_id, description, action) VALUES (?, ?, ?)");
                 $stmt->execute([
                     $_SESSION['user_id'],
@@ -29,11 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $_SESSION['success_message'] = "Product added successfully!";
             } elseif ($_POST['action'] === 'add_category') {
-                // Add new category
                 $stmt = $conn->prepare("INSERT INTO categories (name) VALUES (?)");
                 $stmt->execute([$_POST['category_name']]);
                 
-                // Log activity
                 $stmt = $conn->prepare("INSERT INTO activity_log (user_id, description, action) VALUES (?, ?, ?)");
                 $stmt->execute([
                     $_SESSION['user_id'],
@@ -43,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $_SESSION['success_message'] = "Category added successfully!";
             } elseif ($_POST['action'] === 'edit') {
-                // Update existing item
                 $stmt = $conn->prepare("UPDATE products SET name = ?, category_id = ?, price = ?, stock = ? WHERE id = ?");
                 $stmt->execute([
                     $_POST['item_name'],
@@ -63,11 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $_SESSION['success_message'] = "Product updated successfully!";
             } elseif ($_POST['action'] === 'delete') {
-                // Delete item
                 $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
                 $stmt->execute([$_POST['item_id']]);
                 
-                // Log activity
                 $stmt = $conn->prepare("INSERT INTO activity_log (user_id, description, action) VALUES (?, ?, ?)");
                 $stmt->execute([
                     $_SESSION['user_id'],
@@ -77,14 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $_SESSION['success_message'] = "Product deleted successfully!";
             } elseif ($_POST['action'] === 'edit_category') {
-                // Update existing category
                 $stmt = $conn->prepare("UPDATE categories SET name = ? WHERE id = ?");
                 $stmt->execute([
                     $_POST['category_name'],
                     $_POST['category_id']
                 ]);
                 
-                // Log activity
                 $stmt = $conn->prepare("INSERT INTO activity_log (user_id, description, action) VALUES (?, ?, ?)");
                 $stmt->execute([
                     $_SESSION['user_id'],
@@ -94,7 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $_SESSION['success_message'] = "Category updated successfully!";
             } elseif ($_POST['action'] === 'delete_category') {
-                // Check if category is being used
                 $stmt = $conn->prepare("SELECT COUNT(*) FROM products WHERE category_id = ?");
                 $stmt->execute([$_POST['category_id']]);
                 $count = $stmt->fetchColumn();
@@ -102,11 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($count > 0) {
                     $_SESSION['error_message'] = "Cannot delete category. It is used by {$count} products.";
                 } else {
-                    // Delete category
                     $stmt = $conn->prepare("DELETE FROM categories WHERE id = ?");
                     $stmt->execute([$_POST['category_id']]);
                     
-                    // Log activity
                     $stmt = $conn->prepare("INSERT INTO activity_log (user_id, description, action) VALUES (?, ?, ?)");
                     $stmt->execute([
                         $_SESSION['user_id'],
@@ -122,20 +109,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error_message'] = "Error: " . $e->getMessage();
     }
     
-    // Redirect to prevent form resubmission
     header("Location: inventory.php");
     exit();
 }
 
-// Search functionality
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 $category_filter = isset($_GET['category']) ? $_GET['category'] : '';
 $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
 
-// Fetch categories for dropdown
 $categories = $conn->query("SELECT * FROM categories ORDER BY id")->fetchAll();
 
-// Fetch products with category names
 $query = "SELECT p.*, c.name as category_name 
           FROM products p 
           LEFT JOIN categories c ON p.category_id = c.id 
@@ -578,7 +561,6 @@ include '../../layouts/header.php';
         }
     }
     
-    // Close modal when clicking outside the modal content
     window.onclick = function(event) {
         if (event.target.classList.contains('modal')) {
             event.target.style.display = 'none';

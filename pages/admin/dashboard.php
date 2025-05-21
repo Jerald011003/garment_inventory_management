@@ -1,5 +1,4 @@
 <?php
-// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -9,10 +8,8 @@ checkAuth('admin');
 
 $pageTitle = "Overall Reports";
 
-// Default to current month
 $timeRange = isset($_GET['time_range']) ? $_GET['time_range'] : 'this_month';
 
-// Calculate date ranges based on selected time range
 $endDate = date('Y-m-d 23:59:59');
 switch ($timeRange) {
     case 'this_month':
@@ -33,7 +30,6 @@ switch ($timeRange) {
 }
 
 try {
-    // Get total stock items and value
     $stmt = $conn->query("SELECT 
         COUNT(*) as total_items,
         SUM(stock) as total_stock,
@@ -41,7 +37,6 @@ try {
         FROM products");
     $stockStats = $stmt->fetch();
 
-    // Get warehouse outflow (items shipped)
     $stmt = $conn->prepare("SELECT 
         COUNT(DISTINCT o.id) as total_orders,
         COALESCE(SUM(oi.quantity), 0) as total_items_shipped
@@ -52,7 +47,6 @@ try {
     $stmt->execute([$startDate, $endDate]);
     $outflowStats = $stmt->fetch();
 
-    // Get delivered items
     $stmt = $conn->prepare("SELECT 
         COUNT(DISTINCT o.id) as total_orders,
         COALESCE(SUM(oi.quantity), 0) as total_items_delivered
@@ -63,7 +57,6 @@ try {
     $stmt->execute([$startDate, $endDate]);
     $deliveredStats = $stmt->fetch();
 
-    // Get total revenue
     $stmt = $conn->prepare("SELECT 
         COALESCE(SUM(o.total_amount), 0) as total_revenue
         FROM orders o
@@ -72,7 +65,6 @@ try {
     $stmt->execute([$startDate, $endDate]);
     $revenueStats = $stmt->fetch();
 
-    // Get recently added stock
     $stmt = $conn->query("SELECT 
         p.name as product_name,
         c.name as category_name,
@@ -84,7 +76,6 @@ try {
         LIMIT 3");
     $recentStock = $stmt->fetchAll();
 
-    // Get low stock items
     $stmt = $conn->query("SELECT 
         p.name as product_name,
         c.name as category_name,
@@ -104,7 +95,6 @@ try {
     $dailySales->execute();
     $dailySalesAmount = $dailySales->fetchColumn();
 
-    // Get weekly sales (last 7 days)
     $weeklySales = $conn->prepare("
         SELECT COALESCE(SUM(total_amount), 0) as weekly_sales
         FROM orders
@@ -113,7 +103,6 @@ try {
     $weeklySales->execute();
     $weeklySalesAmount = $weeklySales->fetchColumn();
 
-    // Get daily and weekly order counts
     $dailyOrders = $conn->prepare("
         SELECT COUNT(*) as count
         FROM orders

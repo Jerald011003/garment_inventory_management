@@ -100,7 +100,7 @@ $notificationCounts = isset($conn) ? getInventoryNotifications($conn) : ['total'
                             </a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="../../pages/reports/sales_report.php">
+                        <a class="nav-link" href="../../pages/admin/sales_report.php">
                             <i class="fas text-white fa-chart-bar"></i>
                             <span class="text-white">Sales Report</span>
                         </a>
@@ -119,7 +119,7 @@ $notificationCounts = isset($conn) ? getInventoryNotifications($conn) : ['total'
                             </a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="../../pages/reports/sales_report.php">
+                        <a class="nav-link" href="../../pages/sales/sales_report.php">
                             <i class="fas text-white fa-chart-bar"></i>
                             <span class="text-white">Sales Report</span>
                         </a>
@@ -138,7 +138,7 @@ $notificationCounts = isset($conn) ? getInventoryNotifications($conn) : ['total'
                             </a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="../../pages/reports/sales_report.php">
+                        <a class="nav-link" href="../../pages/staff/sales_report.php">
                             <i class="fas text-white fa-chart-bar"></i>
                             <span class="text-white">Sales Report</span>
                         </a>

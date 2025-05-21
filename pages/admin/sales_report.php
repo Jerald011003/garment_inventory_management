@@ -1,25 +1,23 @@
 <?php
-// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 
 require_once '../../includes/auth/auth_check.php';
 require_once '../../includes/config/database.php';
-// Allow access to all account types
-checkAuth(); // No specific role required
+
+checkAuth(); 
 
 $pageTitle = "Sales Reports";
 
-// Get time range filter
-$timeRange = isset($_GET['time_range']) ? $_GET['time_range'] : 'today';
+$timeRange = isset($_GET['time_range']) ? $_GET['time_range'] : 'all_time';
 $startDate = null;
 $endDate = date('Y-m-d 23:59:59');
 
 switch ($timeRange) {
     case 'all_time':
-        $startDate = '1970-01-01 00:00:00'; // Beginning of time
-        $endDate = '2099-12-31 23:59:59';   // Far future
+        $startDate = '1970-01-01 00:00:00'; 
+        $endDate = '2099-12-31 23:59:59';  
         break;
     case 'today':
         $startDate = date('Y-m-d 00:00:00');
@@ -807,7 +805,6 @@ include '../../layouts/header.php';
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Time Range Dropdown Toggle
     const timeRangeHeader = document.getElementById('timeRangeHeader');
     const timeRangeDropdown = document.getElementById('timeRangeDropdown');
     const timeRangeOptions = document.querySelectorAll('.time-range-option');
@@ -821,25 +818,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const customEndDate = document.getElementById('customEndDate');
     const applyCustomDates = document.getElementById('applyCustomDates');
     
-    // Toggle dropdown
     timeRangeHeader.addEventListener('click', function() {
         timeRangeDropdown.style.display = timeRangeDropdown.style.display === 'none' ? 'block' : 'none';
     });
     
-    // Close dropdown when clicking outside
     document.addEventListener('click', function(event) {
         if (!timeRangeHeader.contains(event.target) && !timeRangeDropdown.contains(event.target)) {
             timeRangeDropdown.style.display = 'none';
         }
     });
     
-    // Handle option selection
     timeRangeOptions.forEach(option => {
         option.addEventListener('click', function() {
             const value = this.getAttribute('data-value');
             timeRangeInput.value = value;
             
-            // Show/hide custom date inputs
             if (value === 'custom') {
                 customDateContainer.style.display = 'block';
             } else {
@@ -847,13 +840,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 timeRangeForm.submit();
             }
             
-            // Update active state
             timeRangeOptions.forEach(opt => opt.classList.remove('active'));
             this.classList.add('active');
         });
     });
     
-    // Apply custom date range
     applyCustomDates.addEventListener('click', function() {
         const startDate = customStartDate.value;
         const endDate = customEndDate.value;
@@ -867,9 +858,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Print report functionality
     document.getElementById('printReportBtn').addEventListener('click', function() {
-        // Create a print-specific stylesheet
         const style = document.createElement('style');
         style.id = 'print-style';
         style.innerHTML = `
@@ -895,15 +884,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         window.print();
         
-        // Remove the print stylesheet after printing
         document.head.removeChild(style);
     });
     
-    // Export to CSV functionality
         document.getElementById('exportCSVBtn').addEventListener('click', function() {
         const table = document.getElementById('salesTable');
         
-        // BOM (Byte Order Mark) for proper UTF-8 encoding
         let csvContent = '\uFEFF';
         
         let rows = table.querySelectorAll('tr');
@@ -911,20 +897,17 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < rows.length; i++) {
             let row = [], cols = rows[i].querySelectorAll('td, th');
             
-            for (let j = 0; j < cols.length - 1; j++) { // Skip the last column (actions)
+            for (let j = 0; j < cols.length - 1; j++) { 
                 let text = '';
                 
-                // Special handling for different columns
-                if (j === 0) { // Order ID column
+                if (j === 0) { 
                     text = cols[j].textContent.trim();
                 } 
-                else if (j === 1 && i > 0) { // Date column for data rows
-                    // Format date properly for CSV
+                else if (j === 1 && i > 0) { 
                     const dateText = cols[j].textContent.trim();
-                    text = dateText; // Keep the formatted date as is
+                    text = dateText; 
                 }
-                else if (j === 5 && i > 0) { // Total Amount column
-                    // Fix the peso symbol by using a plain "P" instead
+                else if (j === 5 && i > 0) { 
                     const amountText = cols[j].textContent.trim();
                     text = amountText.replace('₱', 'P');
                 }
@@ -932,7 +915,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     text = cols[j].textContent.trim();
                 }
                 
-                // Escape quotes and add quotes around each field
                 text = text.replace(/"/g, '""');
                 row.push('"' + text + '"');
             }
@@ -940,11 +922,9 @@ document.addEventListener('DOMContentLoaded', function() {
             csvContent += row.join(',') + '\n';
         }
         
-        // Create a Blob with the CSV content
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         
-        // Create a link and trigger download
         const link = document.createElement('a');
         link.setAttribute('href', url);
         link.setAttribute('download', 'sales_report_<?php echo date('Y-m-d'); ?>.csv');
@@ -955,41 +935,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     
-    // View receipt functionality
 const receiptButtons = document.querySelectorAll('.view-receipt');
 const receiptModal = document.getElementById('receiptModal');
 const closeReceiptModal = document.getElementById('closeReceiptModal');
 const receiptContent = document.getElementById('receiptContent');
 const printSingleReceipt = document.getElementById('printSingleReceipt');
 
-// Close modal when clicking the X
 closeReceiptModal.addEventListener('click', function() {
     receiptModal.style.display = 'none';
 });
 
-// Close modal when clicking outside of it
 window.addEventListener('click', function(event) {
     if (event.target == receiptModal) {
         receiptModal.style.display = 'none';
     }
 });
 
-// View receipt button click handler
-// Update the receipt generation in both the view receipt and print all receipts functions
-// Example for the single receipt view function:
-
-// View receipt button click handler
-// View receipt button click handler
 receiptButtons.forEach(button => {
     button.addEventListener('click', function() {
         const orderId = this.getAttribute('data-order-id');
         const orders = <?php echo json_encode($orders); ?>;
         
-        // Find the order with matching ID
         const order = orders.find(o => o.id == orderId);
         
         if (order) {
-            // Create receipt HTML with dark text colors
             const receiptHtml = `
                 <div class="receipt" style="font-family: 'Arial', sans-serif; margin: 0 auto; color: #000;">
                     <!-- Header -->
@@ -1068,7 +1037,6 @@ receiptButtons.forEach(button => {
                 </div>
             `;
             
-            // Set content and display modal
             receiptContent.innerHTML = receiptHtml;
             receiptModal.style.display = 'block';
         } else {
@@ -1077,12 +1045,9 @@ receiptButtons.forEach(button => {
     });
 });
 
-// Print single receipt
 printSingleReceipt.addEventListener('click', function() {
-    // Get the receipt content
     const receiptHtml = receiptContent.innerHTML;
     
-    // Create a print window
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
         <html>
@@ -1110,15 +1075,12 @@ printSingleReceipt.addEventListener('click', function() {
     
     printWindow.document.close();
     
-    // Add slight delay to ensure content is loaded
     setTimeout(() => {
         printWindow.print();
-        // printWindow.close();
     }, 500);
 });
     
     document.getElementById('printAllReceiptsBtn').addEventListener('click', function() {
-        // Get all orders from the table
         const orders = <?php echo json_encode($orders); ?>;
         
         if (orders.length === 0) {
@@ -1126,10 +1088,8 @@ printSingleReceipt.addEventListener('click', function() {
             return;
         }
         
-        // Create content with all receipts
         let printContent = '<div class="all-receipts">';
         
-        // Add each receipt with improved styling
         orders.forEach((order, index) => {
             printContent += `
                 <div class="receipt" style="page-break-after: always; font-family: 'Arial', sans-serif; max-width: 80mm; margin: 0 auto; border: 1px solid #ddd; padding: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -1212,7 +1172,6 @@ printSingleReceipt.addEventListener('click', function() {
         
         printContent += '</div>';
         
-        // Create a new window for printing
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
             <html>
@@ -1242,7 +1201,6 @@ printSingleReceipt.addEventListener('click', function() {
         
         printWindow.document.close();
         
-        // Add slight delay to ensure content is loaded
         setTimeout(() => {
             printWindow.print();
         }, 500);
